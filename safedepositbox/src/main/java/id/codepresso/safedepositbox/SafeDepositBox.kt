@@ -2,10 +2,9 @@ package id.codepresso.safedepositbox
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import android.os.Build
 import android.text.TextUtils
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import com.google.gson.Gson
+
 
 /**
  * Crafted by Razib Kani Maulidan on 14/04/20.
@@ -13,23 +12,9 @@ import androidx.security.crypto.MasterKeys
 
 class SafeDepositBox(private val context: Context, private val prefName: String) {
 
-    private val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
-    private val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
+    private val gson by lazy { Gson() }
 
-    private val sharedPrefs by lazy {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            EncryptedSharedPreferences
-                .create(
-                    prefName,
-                    masterKeyAlias,
-                    context,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-                )
-        } else {
-            context.getSharedPreferences(prefName, MODE_PRIVATE)
-        }
-    }
+    private val sharedPrefs by lazy { context.getSharedPreferences(prefName, MODE_PRIVATE) }
     private val sharedPrefsEditor = sharedPrefs.edit()
 
     private val delimiter = "::"
@@ -163,6 +148,28 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     fun storeListDouble(key: String, values: List<Double>) {
         val arrayDouble: Array<Double> = values.toTypedArray()
         sharedPrefsEditor.putString(key, TextUtils.join(delimiter, arrayDouble)).apply()
+    }
+
+    /**
+     * Store Any value into SharedPreferences
+     * @param key SharedPreferences key
+     * @param value Any value to be stored
+     */
+    fun storeObject(key: String, value: Any) {
+        sharedPrefsEditor.putString(key, gson.toJson(value)).apply()
+    }
+
+    /**
+     * Store List<Any> value into SharedPreferences
+     * @param key SharedPreferences key
+     * @param value List<Any> value to be stored
+     */
+    fun storeListObject(key: String, values: List<Any>) {
+        val objectStrings = mutableListOf<String>()
+        values.forEach { obj ->
+            objectStrings.add(gson.toJson(obj))
+        }
+        storeListString(key, objectStrings)
     }
 
     /**
@@ -309,6 +316,33 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
         return mutableListOf<Double>().apply {
             maskedDoubleList.forEach { item -> this.add(item.toDouble()) }
         }
+    }
+
+    /**
+     * Get T value from SharedPreferences at 'key'.
+     * @param key SharedPreferences key
+     * @return T value at 'key' or NPE if value not found
+     */
+    fun <T> getObject(key: String, classOfT: Class<T>): T {
+        val objectString = getString(key)
+        return gson.fromJson(objectString, classOfT) ?: throw NullPointerException()
+    }
+
+    /**
+     * Get List<T> value from SharedPreferences at 'key'.
+     * @param key SharedPreferences key
+     * @return List<T> value at 'key'
+     */
+    fun <T> getListObject(key: String, classOfT: Class<T>): List<T> {
+        val objectStrings = getListString(key)
+        val objects = mutableListOf<T>()
+
+        objectStrings.forEach { objectString ->
+            val value = gson.fromJson(objectString, classOfT)
+            objects.add(value)
+        }
+
+        return objects
     }
 
     /**
