@@ -6,6 +6,25 @@ This is a Wrapper for SharedPreferences, it simplify preferences implementation 
 
 This can store more value/s type such as `String, List<String>, Float, List<Float>, Double, List<Double>, Boolean, List<Boolean>, Object, List<Object>`
 
+# Usage
+
+Add it in your root build.gradle at the end of repositories:
+
+```gradle
+allprojects {
+  repositories {
+	  ...
+	  maven { url 'https://jitpack.io' }
+	}
+}
+```
+
+Add the library to your apps build.gradle:
+
+```gradle
+implementation 'com.github.RazibKani:SafeDepositBox:0.1'
+```
+
 # Examples
 
 ## Store String
