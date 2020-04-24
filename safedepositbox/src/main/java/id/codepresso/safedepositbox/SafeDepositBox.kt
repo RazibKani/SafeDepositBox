@@ -2,7 +2,10 @@ package id.codepresso.safedepositbox
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.os.Build
 import android.text.TextUtils
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 
 /**
  * Crafted by Razib Kani Maulidan on 14/04/20.
@@ -10,7 +13,23 @@ import android.text.TextUtils
 
 class SafeDepositBox(private val context: Context, private val prefName: String) {
 
-    private val sharedPrefs by lazy { context.getSharedPreferences(prefName, MODE_PRIVATE) }
+    private val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
+    private val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
+
+    private val sharedPrefs by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            EncryptedSharedPreferences
+                .create(
+                    prefName,
+                    masterKeyAlias,
+                    context,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                )
+        } else {
+            context.getSharedPreferences(prefName, MODE_PRIVATE)
+        }
+    }
     private val sharedPrefsEditor = sharedPrefs.edit()
 
     private val delimiter = "::"
