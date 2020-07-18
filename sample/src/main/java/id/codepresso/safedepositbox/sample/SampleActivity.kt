@@ -19,8 +19,7 @@ class SampleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val tatang =
-            User("Tatang", "Sutarna")
+        val tatang = User("Tatang", "Sutarna")
         val bejo = User("Bejo", "Surojo")
 
         safeDepositBox.apply {
@@ -30,8 +29,8 @@ class SampleActivity : AppCompatActivity() {
 
         stringLogger.append("Storing Object Value\n\n")
 
-        val tatangFromPref = safeDepositBox.getObject("tatang", User::class.java)
-        val bejoFromPref = safeDepositBox.getObject("bejo", User::class.java)
+        val tatangFromPref = safeDepositBox.getObject<User>("tatang")
+        val bejoFromPref = safeDepositBox.getObject<User>("bejo")
 
         stringLogger.append("Getting Object Value\n\n")
         stringLogger.append(tatangFromPref.toString())

@@ -1,10 +1,10 @@
 package id.codepresso.safedepositbox
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.text.TextUtils
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.google.gson.Gson
-
 
 /**
  * Crafted by Razib Kani Maulidan on 14/04/20.
@@ -12,9 +12,18 @@ import com.google.gson.Gson
 
 class SafeDepositBox(private val context: Context, private val prefName: String) {
 
-    private val gson by lazy { Gson() }
+    protected val gson by lazy { Gson() }
 
-    private val sharedPrefs by lazy { context.getSharedPreferences(prefName, MODE_PRIVATE) }
+    private val sharedPrefs by lazy {
+        val masterKeyAlias =
+            MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+
+        EncryptedSharedPreferences.create(
+            context, prefName, masterKeyAlias.build(),
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        );
+    }
     private val sharedPrefsEditor = sharedPrefs.edit()
 
     private val delimiter = "::"
@@ -323,9 +332,9 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
      * @param key SharedPreferences key
      * @return T value at 'key' or NPE if value not found
      */
-    fun <T> getObject(key: String, classOfT: Class<T>): T {
+    inline fun <reified T : Any> getObject(key: String): T {
         val objectString = getString(key)
-        return gson.fromJson(objectString, classOfT) ?: throw NullPointerException()
+        return gson.fromJson(objectString, T::class.java) ?: throw NullPointerException()
     }
 
     /**
@@ -333,12 +342,12 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
      * @param key SharedPreferences key
      * @return List<T> value at 'key'
      */
-    fun <T> getListObject(key: String, classOfT: Class<T>): List<T> {
+    inline fun <reified T : Any> getListObject(key: String): List<T> {
         val objectStrings = getListString(key)
         val objects = mutableListOf<T>()
 
         objectStrings.forEach { objectString ->
-            val value = gson.fromJson(objectString, classOfT)
+            val value = gson.fromJson(objectString, T::class.java)
             objects.add(value)
         }
 
