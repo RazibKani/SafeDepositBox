@@ -22,7 +22,7 @@ allprojects {
 Add the library to your apps build.gradle:
 
 ```gradle
-implementation 'com.github.RazibKani:SafeDepositBox:0.1'
+implementation 'com.github.RazibKani:SafeDepositBox:0.2'
 ```
 
 # Examples
@@ -55,6 +55,6 @@ val tatang = User("tatang", "sutarna")
 safeDepositBox.storeObject("tatang", tatang)
 
 // get object user
-val userTatang = safeDepositBox.getObject("tatang", User::class.java")
+val userTatang = safeDepositBox.getObject<User>("tatang")
 
 ```
