@@ -40,7 +40,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     /**
      * Store List<Boolean> value into SharedPreferences
      * @param key SharedPreferences key
-     * @param value List<Boolean> value to be stored
+     * @param values List<Boolean> value to be stored
      */
     fun storeListBoolean(key: String, values: List<Boolean>) {
         val maskedBooleanList = mutableListOf<String>()
@@ -67,7 +67,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     /**
      * Store Set<String> value into SharedPreferences
      * @param key SharedPreferences key
-     * @param value Set<String> value to be stored
+     * @param values Set<String> value to be stored
      */
     fun storeStringSet(key: String, values: Set<String>) {
         sharedPrefsEditor.putStringSet(key, values).apply()
@@ -76,7 +76,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     /**
      * Store List<String> value into SharedPreferences
      * @param key SharedPreferences key
-     * @param value List<String> value to be stored
+     * @param values List<String> value to be stored
      */
     fun storeListString(key: String, values: List<String>) {
         val arrayString: Array<String> = values.toTypedArray()
@@ -95,7 +95,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     /**
      * Store List<Int> value into SharedPreferences
      * @param key SharedPreferences key
-     * @param value List<Int> value to be stored
+     * @param values List<Int> value to be stored
      */
     fun storeListInt(key: String, values: List<Int>) {
         val arrayInt: Array<Int> = values.toTypedArray()
@@ -114,7 +114,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     /**
      * Store List<Long> value into SharedPreferences
      * @param key SharedPreferences key
-     * @param value List<Long> value to be stored
+     * @param values List<Long> value to be stored
      */
     fun storeListLong(key: String, values: List<Long>) {
         val arrayLong: Array<Long> = values.toTypedArray()
@@ -133,7 +133,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     /**
      * Store List<Float> value into SharedPreferences
      * @param key SharedPreferences key
-     * @param value List<Float> value to be stored
+     * @param values List<Float> value to be stored
      */
     fun storeListFloat(key: String, values: List<Float>) {
         val arrayFloat: Array<Float> = values.toTypedArray()
@@ -152,7 +152,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     /**
      * Store List<Double> value into SharedPreferences
      * @param key SharedPreferences key
-     * @param value List<Double> value to be stored
+     * @param values List<Double> value to be stored
      */
     fun storeListDouble(key: String, values: List<Double>) {
         val arrayDouble: Array<Double> = values.toTypedArray()
@@ -171,7 +171,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     /**
      * Store List<Any> value into SharedPreferences
      * @param key SharedPreferences key
-     * @param value List<Any> value to be stored
+     * @param values List<Any> value to be stored
      */
     fun storeListObject(key: String, values: List<Any>) {
         val objectStrings = mutableListOf<String>()

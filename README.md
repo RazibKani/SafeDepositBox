@@ -1,6 +1,6 @@
 # SafeDepositBox
 
-This is a Wrapper for SharedPreferences, it simplify preferences implementation for storing value/s.
+This is a Wrapper for EncryptedSharedPreferences, it simplify preferences implementation for storing value/s.
 
 # Value/s Support
 
