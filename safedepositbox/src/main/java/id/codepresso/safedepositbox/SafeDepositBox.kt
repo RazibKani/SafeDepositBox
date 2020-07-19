@@ -60,7 +60,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
      * @param key SharedPreferences key
      * @param value String value to be stored
      */
-    fun storeString(key: String, value: String) {
+    fun storeString(key: String, value: String?) {
         sharedPrefsEditor.putString(key, value).apply()
     }
 
@@ -340,14 +340,14 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     /**
      * Get List<T> value from SharedPreferences at 'key'.
      * @param key SharedPreferences key
-     * @return List<T> value at 'key'
+     * @return List<T> value at 'key' or NPE if value not found
      */
     inline fun <reified T : Any> getListObject(key: String): List<T> {
         val objectStrings = getListString(key)
         val objects = mutableListOf<T>()
 
         objectStrings.forEach { objectString ->
-            val value = gson.fromJson(objectString, T::class.java)
+            val value = gson.fromJson(objectString, T::class.java) ?: throw NullPointerException()
             objects.add(value)
         }
 
