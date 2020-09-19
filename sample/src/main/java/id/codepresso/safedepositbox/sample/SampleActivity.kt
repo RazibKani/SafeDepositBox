@@ -1,6 +1,7 @@
 package id.codepresso.safedepositbox.sample
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import id.codepresso.safedepositbox.SafeDepositBox
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,6 +39,11 @@ class SampleActivity : AppCompatActivity() {
         stringLogger.append(bejoFromPref.toString())
 
         updateLogView()
+
+        btnClearPrefs.setOnClickListener {
+            safeDepositBox.clear()
+            Toast.makeText(this, "Cleared!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun updateLogView() {

@@ -334,7 +334,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
      */
     inline fun <reified T : Any> getObject(key: String): T {
         val objectString = getString(key)
-        return gson.fromJson(objectString, T::class.java) ?: throw NullPointerException()
+        return `access$gson`.fromJson(objectString, T::class.java) ?: throw NullPointerException()
     }
 
     /**
@@ -347,7 +347,7 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
         val objects = mutableListOf<T>()
 
         objectStrings.forEach { objectString ->
-            val value = gson.fromJson(objectString, T::class.java) ?: throw NullPointerException()
+            val value = `access$gson`.fromJson(objectString, T::class.java) ?: throw NullPointerException()
             objects.add(value)
         }
 
@@ -368,4 +368,8 @@ class SafeDepositBox(private val context: Context, private val prefName: String)
     fun clear() {
         sharedPrefsEditor.clear().apply()
     }
+
+    @PublishedApi
+    internal val `access$gson`: Gson
+        get() = gson
 }

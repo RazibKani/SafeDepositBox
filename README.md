@@ -22,7 +22,7 @@ allprojects {
 Add the library to your apps build.gradle:
 
 ```gradle
-implementation 'com.github.RazibKani:SafeDepositBox:0.3'
+implementation 'com.github.RazibKani:SafeDepositBox:0.4'
 ```
 
 # Examples
